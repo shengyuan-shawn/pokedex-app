@@ -136,7 +136,7 @@ export default function PokemonListPage() {
 
                     {/* Pokemon Name */}
                     <Typography
-                      variant="h5"
+                      variant="h6"
                       component="h2"
                       sx={{
                         mb: 3,
