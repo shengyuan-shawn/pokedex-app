@@ -3,7 +3,7 @@ import { pokemonLogo } from "../assets/image";
 
 export default function Header() {
   return (
-    <Container maxWidth="sm">
+    <Container maxWidth="xl" component="header">
       {/* Platform Logo */}
       <Box sx={{ display: "flex", justifyContent: "center", mb: 4 }}>
         <img
