@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { getPokemon } from "../api/pokemonApi";
+import { getPokemon } from "../api/pokemon_api";
 import {
   Container,
   Box,
@@ -162,7 +162,7 @@ export default function PokemonDetail() {
               textTransform: "capitalize",
             }}
           >
-            {pokemon.name}
+            {(pokemon.name).replace(/-/g, " ")}
           </Typography>
 
           {/* Pokemon Types */}

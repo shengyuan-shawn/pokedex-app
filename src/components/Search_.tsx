@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPokemon } from "../api/pokemonApi";
+import { getPokemon } from "../api/pokemon_api";
 import {
   Container,
   Box,
@@ -39,9 +39,9 @@ export default function Search() {
   };
 
   return (
-    <Container maxWidth="sm" sx={{ py: 4 }}>
+    <Container maxWidth="sm" sx={{ pb: 8 }}>
       {/* Search Form */}
-      <Box component="form" onSubmit={searchHandler} sx={{ mb: 4 }}>
+      <Box component="form" onSubmit={searchHandler} >
         <Box
           sx={{
             display: "flex",

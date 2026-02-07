@@ -2,8 +2,8 @@ import { Routes, Route } from "react-router-dom";
 import { Container, Box } from "@mui/material";
 import Header from "./components/Header_";
 import Search from "./components/Search_";
-import Navigation from "./components/Navigation";
-import PokemonListPage from "./components/PokemonListView";
+// import Navigation from "./components/Navigation_";
+import PokemonListPage from "./components/PokemonListView_";
 import PokemonDetail from "./components/PokemonDetails_";
 import Footer from "./components/Footer_";
 import "./App.css";
@@ -34,8 +34,8 @@ function App() {
           <Route path="/pokemon/:pokemonName" element={<PokemonDetail />} />
 
           {/* Other pages */}
-          <Route path="/berries" element={<div>Berries Page Content</div>} />
-          <Route path="/items" element={<div>Items Page Content</div>} />
+          {/* <Route path="/berries" element={<div>Berries Page Content</div>} /> */}
+          {/* <Route path="/items" element={<div>Items Page Content</div>} /> */}
         </Routes>
       </Container>
 
