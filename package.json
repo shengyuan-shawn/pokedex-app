@@ -3,6 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "homepage": "https://shengyuan-shawn.github.io/pokedex-app",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
