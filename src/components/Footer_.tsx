@@ -3,7 +3,7 @@ import { pokeapiLogo } from "../assets/image";
 
 export default function Footer() {
   return (
-    <Container component="footer" maxWidth="xl">
+    <Container maxWidth="xl" component="footer">
       {/* Footer */}
       <Box
         sx={{
@@ -11,8 +11,8 @@ export default function Footer() {
           justifyContent: "center",
           alignItems: "center",
           gap: 1,
-          mt: 4,
-          mb: 3,
+          mt: 3,
+          mb: 2,
         }}
       >
         <Typography

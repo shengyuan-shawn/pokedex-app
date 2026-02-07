@@ -77,7 +77,7 @@ export default function PokemonListPage() {
   };
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
+    <Container maxWidth="xl" sx={{ py: 4 }}>
       {/* Loading State */}
       {loading && (
         <Box sx={{ display: "flex", justifyContent: "center", py: 4 }}>
