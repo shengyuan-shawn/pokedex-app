@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Container,
@@ -22,6 +23,7 @@ export default function PokemonListPage() {
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
   const pokemonsPerPage = 20;
+  const navigate = useNavigate();
 
   const fetchPokemonList = async (page) => {
     setLoading(true);
@@ -79,6 +81,7 @@ export default function PokemonListPage() {
             {pokemonList.map((pokemon) => (
               <Card
                 key={pokemon.id}
+                onClick={() => navigate(`/pokemon/${pokemon.name}`)}
                 sx={{
                   boxShadow: "none",
                   borderRadius: "14px",
