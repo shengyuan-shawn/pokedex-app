@@ -1,6 +1,6 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { getPokemon } from "../api/pokemon_api";
+import { getPokemon, getPokemonList } from "../api/pokemon_api";
 import {
   Container,
   Box,
@@ -8,6 +8,10 @@ import {
   Button,
   CircularProgress,
   Alert,
+  Paper,
+  List,
+  ListItemButton,
+  ListItemText,
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
@@ -15,7 +19,59 @@ export default function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+  const [suggestions, setSuggestions] = useState([]);
+  const [showSuggestions, setShowSuggestions] = useState(false);
+  const [allPokemon, setAllPokemon] = useState([]);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const fetchAllPokemon = async () => {
+      try {
+        const data = await getPokemonList(1250, 0);
+        setAllPokemon(data.results);
+      } catch (err) {
+        console.error("Error fetching Pokemon list:", err);
+      }
+    };
+
+    fetchAllPokemon();
+  }, []);
+
+  const handleSearchChange = (e) => {
+    const value = e.target.value;
+    setSearchTerm(value);
+
+    if (!value.trim()) {
+      setSuggestions([]);
+      setShowSuggestions(false);
+      return;
+    }
+
+    const filtered = allPokemon
+      .filter((pokemon) =>
+        pokemon.name.toLowerCase().includes(value.toLowerCase()),
+      )
+      .slice(0, 8);
+
+    setSuggestions(filtered);
+    setShowSuggestions(true);
+  };
+
+  const handleSuggestionClick = async (pokemonName) => {
+    setLoading(true);
+    setError(null);
+
+    try {
+      await getPokemon(pokemonName);
+      navigate(`/pokemon/${pokemonName}`);
+      setSearchTerm("");
+      setSuggestions([]);
+      setShowSuggestions(false);
+    } catch (err) {
+      setError("Pokemon not found!");
+      setLoading(false);
+    }
+  };
 
   const searchHandler = async (e) => {
     e.preventDefault();
@@ -27,6 +83,8 @@ export default function Search() {
 
     setLoading(true);
     setError(null);
+    setSuggestions([]);
+    setShowSuggestions(false);
 
     try {
       const data = await getPokemon(searchTerm);
@@ -41,7 +99,11 @@ export default function Search() {
   return (
     <Container maxWidth="sm" sx={{ pb: 8 }}>
       {/* Search Form */}
-      <Box component="form" onSubmit={searchHandler} >
+      <Box
+        component="form"
+        onSubmit={searchHandler}
+        sx={{ position: "relative" }}
+      >
         <Box
           sx={{
             display: "flex",
@@ -62,7 +124,9 @@ export default function Search() {
           <TextField
             type="text"
             value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
+            onChange={handleSearchChange}
+            onFocus={() => searchTerm && setShowSuggestions(true)}
+            onBlur={() => setTimeout(() => setShowSuggestions(false), 200)}
             placeholder="Search your Pokémon!"
             variant="standard"
             size="medium"
@@ -81,6 +145,7 @@ export default function Search() {
                 },
               },
             }}
+            autoComplete="off"
           />
           <Button
             type="submit"
@@ -115,11 +180,54 @@ export default function Search() {
             )}
           </Button>
         </Box>
+
+        {showSuggestions && suggestions.length > 0 && (
+          <Paper
+            sx={{
+              position: "absolute",
+              top: "100%",
+              left: 0,
+              right: 0,
+              maxHeight: "300px",
+              overflowY: "auto",
+              zIndex: 10,
+              marginTop: "8px",
+              borderRadius: "8px",
+            }}
+          >
+            <List sx={{ p: 0 }}>
+              {suggestions.map((pokemon) => (
+                <ListItemButton
+                  key={pokemon.name}
+                  onClick={() => handleSuggestionClick(pokemon.name)}
+                  sx={{
+                    py: 1.5,
+                    px: 2,
+                    "&:hover": {
+                      backgroundColor: "#f5f5f5",
+                    },
+                  }}
+                >
+                  <ListItemText
+                    primary={pokemon.name.replace(/-/g, " ")}
+                    sx={{
+                      textTransform: "capitalize",
+                      "& .MuiListItemText-primary": {
+                        fontSize: "14px",
+                        fontWeight: "500",
+                      },
+                    }}
+                  />
+                </ListItemButton>
+              ))}
+            </List>
+          </Paper>
+        )}
       </Box>
 
       {/* Error State */}
       {error && (
-        <Alert severity="error" sx={{ mb: 4 }}>
+        <Alert severity="error" sx={{ mb: 4, mt: 2 }}>
           {error}
         </Alert>
       )}
