@@ -15,6 +15,35 @@ import {
 } from "@mui/material";
 import SearchIcon from "@mui/icons-material/Search";
 
+// Utility function to calculate match score
+const calculateMatchScore = (pokemonName, searchTerm) => {
+  const search = searchTerm.toLowerCase().replace(/ /g, "-");
+  const name = pokemonName.toLowerCase();
+
+  // Exact match (100 points)
+  if (name === search) {
+    return 100;
+  }
+
+  // Starts with match (90 points)
+  if (name.startsWith(search)) {
+    return 90;
+  }
+
+  // Contains match (70 points)
+  if (name.includes(search)) {
+    return 70;
+  }
+
+  // Partial match (50 points)
+  const searchWithoutHyphen = search.replace(/-/g, "");
+  if (name.replace(/-/g, "").includes(searchWithoutHyphen)) {
+    return 50;
+  }
+
+  return 0;
+};
+
 export default function Search() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -48,9 +77,12 @@ export default function Search() {
     }
 
     const filtered = allPokemon
-      .filter((pokemon) =>
-        pokemon.name.toLowerCase().includes(value.toLowerCase()),
-      )
+      .map((pokemon) => ({
+        ...pokemon,
+        score: calculateMatchScore(pokemon.name, value),
+      }))
+      .filter((pokemon) => pokemon.score > 0)
+      .sort((a, b) => b.score - a.score)
       .slice(0, 8);
 
     setSuggestions(filtered);
