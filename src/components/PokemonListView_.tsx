@@ -14,7 +14,7 @@ import {
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { getPokemonList, getPokemon } from "../api/pokemon_api";
-import { TYPE_COLOURS } from "../../constants/typeColours";
+import { getContrastTextColor, POKEMON_TYPE_COLORS } from "../../constants/type_colours";
 
 export default function PokemonListPage() {
   const [pokemonList, setPokemonList] = useState([]);
@@ -130,12 +130,12 @@ export default function PokemonListPage() {
                         sx={{
                           borderRadius: "4px",
                           background:
-                            TYPE_COLOURS[typeSlot.type.name] || "#ccc",
-                          color: TYPE_COLOURS[typeSlot.type.name],
+                            POKEMON_TYPE_COLORS[typeSlot.type.name] || "#ccc",
+                          color: getContrastTextColor(POKEMON_TYPE_COLORS[typeSlot.type.name]),
                           fontWeight: "bold",
                           textTransform: "capitalize",
                           "& .MuiChip-label": {
-                            filter: "brightness(0.5)",
+                            filter: "brightness(0.9)",
                           },
                         }}
                       />
